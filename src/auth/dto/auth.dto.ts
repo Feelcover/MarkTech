@@ -8,6 +8,7 @@ import {
 
 export class AuthDto {
   @IsEmail()
+  
   email: string;
 
   @MinLength(5, { message: 'Минимальная длина пароля - 5 символов' })
