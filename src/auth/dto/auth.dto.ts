@@ -16,9 +16,11 @@ export class AuthDto {
   @IsString()
   password: string;
 
-  @IsOptional()
-  @IsString()
-  name: string;
+  @IsString({ message: 'Введите имя' })
+  firstName: string;
+
+  @IsString({ message: 'Введите фамилию' })
+  lastName: string;
 
   @IsOptional()
   @IsString()

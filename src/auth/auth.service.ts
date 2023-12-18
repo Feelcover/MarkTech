@@ -28,7 +28,8 @@ export class AuthService {
       data: {
         email: dto.email,
         password: await hash(dto.password),
-        name: dto.name,
+        firstName: dto.firstName,
+        lastName: dto.lastName,
         avatarPath: dto.avatarPath,
         phone: dto.phone
       }
