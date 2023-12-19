@@ -32,13 +32,13 @@ export class UserController {
     return this.userService.updateProfile(id, dto);
   }
 
-  // @HttpCode(200)
-  // @Auth()
-  // @Patch('profile/favorites/:productId')
-  // async toggleFavorite(
-  //   @CurrentUser('id') id: number,
-  //   @Param('productId') productId: string
-  // ) {
-  //   return this.userService.toggleFavorite(id, productId);
-  // }
+  @HttpCode(200)
+  @Auth()
+  @Patch('profile/favorites/:productId')
+  async toggleFavorite(
+    @CurrentUser('id') id: number,
+    @Param('productId') productId: string
+  ) {
+    return this.userService.toggleFavorite(id, +productId);
+  }
 }
