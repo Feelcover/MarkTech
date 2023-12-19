@@ -7,7 +7,8 @@ import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
 import { hash, verify } from 'argon2';
 import { PrismaService } from 'src/prisma.service';
-import { AuthDto } from './dto/auth.dto';
+import { AuthLoginDto } from './dto/auth-login.dto';
+import { AuthRegisterDto } from './dto/auth-register.dto';
 
 @Injectable()
 export class AuthService {
@@ -16,13 +17,19 @@ export class AuthService {
     private jwtService: JwtService
   ) {}
 
-  async register(dto: AuthDto) {
-    const oldUser = await this.prismaService.user.findUnique({
+  async register(dto: AuthRegisterDto) {
+    const oldUserEmail = await this.prismaService.user.findUnique({
       where: {
         email: dto.email
       }
     });
-    if (oldUser) throw new BadRequestException('Пользователь уже существует');
+    if (oldUserEmail) throw new BadRequestException('Email уже зарегистрирован');
+    const oldUserPhone = await this.prismaService.user.findUnique({
+      where: {
+        phone: dto.phone
+      }
+    });
+    if (oldUserPhone) throw new BadRequestException('Мобильный номер уже зарегистрирован');
 
     const user = await this.prismaService.user.create({
       data: {
@@ -43,7 +50,7 @@ export class AuthService {
     };
   }
 
-  async login(dto: AuthDto) {
+  async login(dto: AuthLoginDto) {
     const user = await this.findUser(dto);
     const tokens = await this.issueTokens(user.id)
 
@@ -92,7 +99,7 @@ export class AuthService {
     };
   }
 
-  private async findUser(dto: AuthDto) {
+  private async findUser(dto: AuthLoginDto) {
     const user = await this.prismaService.user.findUnique({
       where: {
         email: dto.email

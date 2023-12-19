@@ -21,7 +21,7 @@ export class UserController {
   @Get('profile')
   @Auth()
   async getProfile(@CurrentUser('id') id: number) {
-    return this.userService.byId(id);
+    return this.userService.profile(id);
   }
 
   @UsePipes(new ValidationPipe())
@@ -29,16 +29,16 @@ export class UserController {
   @Auth()
   @Put('profile')
   async updateProfile(@CurrentUser('id') id: number, @Body() dto: UserDto) {
-    return this.userService.updateProfile(dto);
+    return this.userService.updateProfile(id, dto);
   }
 
-  @HttpCode(200)
-  @Auth()
-  @Patch('profile/favorites/:productId')
-  async toggleFavorite(
-    @CurrentUser('id') id: number,
-    @Param('productId') productId: string
-  ) {
-    return this.userService.toggleFavorite(id, productId);
-  }
+  // @HttpCode(200)
+  // @Auth()
+  // @Patch('profile/favorites/:productId')
+  // async toggleFavorite(
+  //   @CurrentUser('id') id: number,
+  //   @Param('productId') productId: string
+  // ) {
+  //   return this.userService.toggleFavorite(id, productId);
+  // }
 }

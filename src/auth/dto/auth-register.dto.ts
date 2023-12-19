@@ -6,9 +6,8 @@ import {
   MinLength
 } from 'class-validator';
 
-export class AuthDto {
+export class AuthRegisterDto {
   @IsEmail()
-  
   email: string;
 
   @MinLength(5, { message: 'Минимальная длина пароля - 5 символов' })
@@ -26,7 +25,6 @@ export class AuthDto {
   @IsString()
   avatarPath: string;
 
-  @IsOptional()
-  @IsString()
+  @IsString({ message: 'Введите мобильный телефон для связи' })
   phone: string;
 }
