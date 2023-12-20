@@ -61,7 +61,6 @@ export class UserService {
         id
       },
       data: {
-        email: dto.email,
         firstName: dto.firstName,
         lastName: dto.lastName,
         avatarPath: dto.avatarPath,
