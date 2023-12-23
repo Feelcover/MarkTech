@@ -2,6 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CategoryService } from 'src/category/category.service';
 import { PaginationService } from 'src/pagination/pagination.service';
 import { PrismaService } from 'src/prisma.service';
+import { UserService } from 'src/user/user.service';
+import { generateSlug } from 'src/utils/generate-slug';
 import { ProductDto } from './dto/product.dto';
 import { productReturnObjectFullest } from './return-product.object';
 
@@ -10,7 +12,8 @@ export class ProductService {
   constructor(
     private prismaService: PrismaService,
     private paginationService: PaginationService,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private userService: UserService
   ) {}
 
   async create() {
@@ -63,9 +66,34 @@ export class ProductService {
     return products;
   }
 
-  async update(id: number, dto: ProductDto) {
+  async update(id: number, dto: ProductDto, userId:number) {
     const { description, images, price, name, categoryId } = dto;
 
     await this.categoryService.byId(categoryId);
+
+    return this.prismaService.product.update({
+      where: { id },
+      data: {
+        description,
+        images,
+        price,
+        name,
+        slug: generateSlug(name),
+        category: {
+          connect: {
+            id: categoryId
+          }
+        },
+        user: {
+            connect: {
+              id: userId
+            }
+          }
+      }
+    });
+  }
+
+  async delete(id: number) {
+    return this.prismaService.product.delete({ where: { id } });
   }
 }
