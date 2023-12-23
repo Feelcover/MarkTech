@@ -2,20 +2,17 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { generateSlug } from 'src/utils/generate-slug';
 import { CategoryDto } from './dto/category.dto';
+import { returnCategoryObject } from './return-category.object';
 
 @Injectable()
 export class CategoryService {
   constructor(private prismaService: PrismaService) {}
 
-  async create(id: number, dto: CategoryDto) {
-    return this.prismaService.category.update({
-      where: {
-        id
-      },
-      data: {
-        name: '',
-        slug: ''
-      }
+
+
+  async getAll() {
+    return await this.prismaService.category.findMany({
+      select: returnCategoryObject
     });
   }
 
@@ -24,11 +21,7 @@ export class CategoryService {
       where: {
         id
       },
-      select: {
-        id: true,
-        name: true,
-        slug: true
-      }
+      select: returnCategoryObject
     });
 
     if (!category) {
@@ -43,11 +36,7 @@ export class CategoryService {
       where: {
         slug
       },
-      select: {
-        id: true,
-        name: true,
-        slug: true
-      }
+      select: returnCategoryObject
     });
 
     if (!category) {
@@ -55,6 +44,15 @@ export class CategoryService {
     }
 
     return category;
+  }
+
+  async create() {
+    return this.prismaService.category.create({
+      data: {
+        name: '',
+        slug: '',
+      }
+    });
   }
 
   async update(id: number, dto: CategoryDto) {

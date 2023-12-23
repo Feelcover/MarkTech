@@ -3,11 +3,11 @@ import {
   Injectable,
   NotFoundException
 } from '@nestjs/common';
-import { Prisma, User } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { hash } from 'argon2';
-import { AuthRegisterDto } from 'src/auth/dto/auth-register.dto';
 import { PrismaService } from 'src/prisma.service';
 import { UserDto } from './dto/user.dto';
+import { returnUserObject } from './return-user.object';
 
 @Injectable()
 export class UserService {
@@ -19,13 +19,7 @@ export class UserService {
         id
       },
       select: {
-        id: true,
-        email: true,
-        firstName: true,
-        lastName: true,
-        avatarPath: true,
-        password: false,
-        phone: true,
+        ...returnUserObject,
         favorites: {
           select: {
             id: true,
