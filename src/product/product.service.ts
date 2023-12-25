@@ -16,6 +16,11 @@ export class ProductService {
     private userService: UserService
   ) {}
 
+  async getAll(){
+    const products = await this.prismaService.product.findMany()
+    return products
+  }
+
   async create() {
     const product = await this.prismaService.product.create({
       data: {
