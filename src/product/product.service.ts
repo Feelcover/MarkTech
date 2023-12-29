@@ -16,9 +16,9 @@ export class ProductService {
     private userService: UserService
   ) {}
 
-  async getAll(){
-    const products = await this.prismaService.product.findMany()
-    return products
+  async getAll() {
+    const products = await this.prismaService.product.findMany();
+    return products;
   }
 
   async create() {
@@ -71,7 +71,7 @@ export class ProductService {
     return products;
   }
 
-  async update(id: number, dto: ProductDto, userId:number) {
+  async update(id: number, dto: ProductDto, userId: number) {
     const { description, images, price, name, categoryId } = dto;
 
     await this.categoryService.byId(categoryId);
@@ -90,10 +90,10 @@ export class ProductService {
           }
         },
         user: {
-            connect: {
-              id: userId
-            }
+          connect: {
+            id: userId
           }
+        }
       }
     });
   }
